@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DndTaskDb", "DndTaskDb\DndTaskDb.csproj", "{D07778BE-287B-444A-BA5E-AA4428A87830}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DndTaskBusiness", "DndTaskBusiness\DndTaskBusiness.csproj", "{CFD332CC-E826-446B-9781-42A01A216643}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DndTaskUi", "DndTaskUi\DndTaskUi.csproj", "{F270FEC6-131A-4622-93A4-42759467CD2D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D07778BE-287B-444A-BA5E-AA4428A87830}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D07778BE-287B-444A-BA5E-AA4428A87830}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D07778BE-287B-444A-BA5E-AA4428A87830}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D07778BE-287B-444A-BA5E-AA4428A87830}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFD332CC-E826-446B-9781-42A01A216643}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFD332CC-E826-446B-9781-42A01A216643}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFD332CC-E826-446B-9781-42A01A216643}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFD332CC-E826-446B-9781-42A01A216643}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F270FEC6-131A-4622-93A4-42759467CD2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F270FEC6-131A-4622-93A4-42759467CD2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F270FEC6-131A-4622-93A4-42759467CD2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F270FEC6-131A-4622-93A4-42759467CD2D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
