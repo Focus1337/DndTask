@@ -8,12 +8,13 @@
     
     <form method="GET" asp-area="" asp-page="Result">
         <select name="id">
-            @foreach (var (id, name) in Model.Characters)
-            {
-                <option value="@id">
-                    @name
-                </option>
-            }
+            @* @foreach (var (id, name) in Model.Characters) *@
+             @foreach (var character in Model.Characters)
+             {
+                 <option value="@character.Id">
+                     @character.Name
+                 </option>
+             }
         </select>
         <input type="number" name="attack" value="0"/>
         <input type="number" name="weapon" value="0"/>

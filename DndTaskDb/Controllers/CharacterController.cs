@@ -13,9 +13,13 @@ public class CharacterController : ControllerBase
     public CharacterController(CharacterRepository repository) =>
         _repository = repository;
 
+    // [HttpGet]
+    // public IActionResult GetAllCharacterNamesAndId() =>
+    //     new JsonResult(_repository.GetAllCharacterNamesAndId());
+
     [HttpGet]
-    public IActionResult GetAllCharacterNamesAndId() =>
-        new JsonResult(_repository.GetAllCharacterNamesAndId());
+    public async Task<IActionResult> GetAllCharacters() =>
+        new JsonResult(await _repository.GetAllCharacters());
 
     [HttpGet]
     public async Task<IActionResult> GetCharacterById([FromQuery] int id) =>

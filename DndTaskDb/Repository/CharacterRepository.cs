@@ -10,8 +10,11 @@ public class CharacterRepository
     public CharacterRepository(ApplicationContext context) =>
         _context = context;
 
-    public IQueryable<Character> GetAllCharacterNamesAndId() =>
-        _context.Characters.Select(c => new Character {Id = c.Id, Name = c.Name});
+    // public IQueryable<Character> GetAllCharacterNamesAndId() =>
+    //     _context.Characters.Select(c => new Character {Id = c.Id, Name = c.Name});
+
+    public async Task<IEnumerable<Character?>> GetAllCharacters() =>
+        await _context.Characters.ToListAsync();
 
     public async Task<Character?> GetCharacterAsync(int id) =>
         await _context.Characters.FirstOrDefaultAsync(c => c.Id == id);

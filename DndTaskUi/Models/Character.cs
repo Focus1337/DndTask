@@ -9,5 +9,4 @@ public class Character
     public int DamageDicesCount { get; set; }
     public int DamageDiceType { get; set; }
     public int WeaponModifier { get; set; }
-    
 }
