@@ -10,27 +10,28 @@ public class CharacterRepository
     public CharacterRepository(ApplicationContext context) =>
         _context = context;
 
-    public record CharacterIdNameModel(int Id, string Name);
-
-    public IQueryable<CharacterIdNameModel> GetAllCharacterNamesAndId() =>
-        _context.Characters.Select(c => new CharacterIdNameModel(c.Id, c.Name));
+    public IQueryable<Character> GetAllCharacterNamesAndId() =>
+        _context.Characters.Select(c => new Character {Id = c.Id, Name = c.Name});
 
     public async Task<Character?> GetCharacterAsync(int id) =>
-        await _context.Characters.FirstAsync(c => c.Id == id);
+        await _context.Characters.FirstOrDefaultAsync(c => c.Id == id);
 
-    public async Task AddAsync(Character character)
+    public async Task<Character?> GetCharacterAsync(string name) =>
+        await _context.Characters.FirstOrDefaultAsync(c => c.Name == name);
+
+    public async Task AddCharacterAsync(Character character)
     {
         _context.Characters.Add(character);
         await _context.SaveChangesAsync();
     }
 
-    public async Task RemoveAsync(Character character)
+    public async Task RemoveCharacterAsync(Character character)
     {
         _context.Characters.Remove(character);
         await _context.SaveChangesAsync();
     }
-    
-    public async Task UpdateAsync(Character character)
+
+    public async Task UpdateCharacterAsync(Character character)
     {
         _context.Characters.Update(character);
         await _context.SaveChangesAsync();

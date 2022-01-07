@@ -9,7 +9,7 @@ namespace DndTaskDb.Controllers;
 public class CharacterController : ControllerBase
 {
     private readonly CharacterRepository _repository;
-    
+
     public CharacterController(CharacterRepository repository) =>
         _repository = repository;
 
@@ -21,62 +21,57 @@ public class CharacterController : ControllerBase
     public async Task<IActionResult> GetCharacterById([FromQuery] int id) =>
         new JsonResult(await _repository.GetCharacterAsync(id));
 
-    public record CharacterAddingModel(
-        string Name,
-        int AttackModifier,
-        int AttackPerRound,
-        int DamageDicesCount,
-        int DamageDiceType,
-        int WeaponModifier);
-
     [HttpPost]
-    public async Task<IActionResult> AddCharacter([FromBody] CharacterAddingModel characterAddingModel)
+    public async Task<IActionResult> AddCharacter([FromBody] Character newCharacter)
     {
-        var character = new Character
+        var character = await _repository.GetCharacterAsync(newCharacter.Name);
+
+        if (character != null)
+            return BadRequest($"Character {newCharacter.Name} already exists");
+
+        character = new Character
         {
-            Name = characterAddingModel.Name,
-            AttackModifier = characterAddingModel.AttackModifier,
-            AttackPerRound = characterAddingModel.AttackPerRound,
-            DamageDicesCount = characterAddingModel.DamageDicesCount,
-            DamageDiceType = characterAddingModel.DamageDiceType,
-            WeaponModifier = characterAddingModel.WeaponModifier
+            Name = newCharacter.Name,
+            AttackModifier = newCharacter.AttackModifier,
+            AttackPerRound = newCharacter.AttackPerRound,
+            DamageDicesCount = newCharacter.DamageDicesCount,
+            DamageDiceType = newCharacter.DamageDiceType,
+            WeaponModifier = newCharacter.WeaponModifier
         };
 
-        await _repository.AddAsync(character);
+        await _repository.AddCharacterAsync(character);
         return Ok();
     }
-    
-    // [HttpPost]
-    // public async Task<IActionResult> RemoveCharacter([FromBody] CharacterAddingModel characterAddingModel)
-    // {
-    //     var character = new Character
-    //     {
-    //         Name = characterAddingModel.Name,
-    //         AttackModifier = characterAddingModel.AttackModifier,
-    //         AttackPerRound = characterAddingModel.AttackPerRound,
-    //         DamageDicesCount = characterAddingModel.DamageDicesCount,
-    //         DamageDiceType = characterAddingModel.DamageDiceType,
-    //         WeaponModifier = characterAddingModel.WeaponModifier
-    //     };
-    //
-    //     await _repository.RemoveAsync(character);
-    //     return Ok();
-    // }
-    //
-    // [HttpPost]
-    // public async Task<IActionResult> UpdateCharacter([FromBody] CharacterAddingModel characterAddingModel)
-    // {
-    //     var character = new Character
-    //     {
-    //         Name = characterAddingModel.Name,
-    //         AttackModifier = characterAddingModel.AttackModifier,
-    //         AttackPerRound = characterAddingModel.AttackPerRound,
-    //         DamageDicesCount = characterAddingModel.DamageDicesCount,
-    //         DamageDiceType = characterAddingModel.DamageDiceType,
-    //         WeaponModifier = characterAddingModel.WeaponModifier
-    //     };
-    //
-    //     await _repository.UpdateAsync(character);
-    //     return Ok();
-    // }
+
+    [HttpPost]
+    public async Task<IActionResult> RemoveCharacter([FromQuery] int id)
+    {
+        var character = await _repository.GetCharacterAsync(id);
+
+        if (character is null)
+            return BadRequest($"Character with id={id} isn't exists");
+
+        await _repository.RemoveCharacterAsync(character);
+
+        return Ok();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UpdateCharacter([FromBody] Character updatedCharacter)
+    {
+        var character = await _repository.GetCharacterAsync(updatedCharacter.Id);
+
+        if (character is null)
+            return BadRequest($"Character with id={updatedCharacter.Id} isn't exists");
+
+        character.Name = updatedCharacter.Name;
+        character.AttackModifier = updatedCharacter.AttackModifier;
+        character.AttackPerRound = updatedCharacter.AttackPerRound;
+        character.DamageDicesCount = updatedCharacter.DamageDicesCount;
+        character.DamageDiceType = updatedCharacter.DamageDiceType;
+        character.WeaponModifier = updatedCharacter.WeaponModifier;
+
+        await _repository.UpdateCharacterAsync(character);
+        return Ok();
+    }
 }
