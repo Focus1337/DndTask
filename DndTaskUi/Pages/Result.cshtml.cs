@@ -9,6 +9,28 @@ public class Result : PageModel
 
     private static readonly HttpClient client = new();
 
+    private record CharacterModel(
+        string Name,
+        int AttackModifier,
+        int AttackPerRound,
+        int DamageDicesCount,
+        int DamageDiceType,
+        int WeaponModifier,
+        int AttackModifierAddition,
+        int DamageModifierAddition);
+
+
+    public record CalculatedCharacterModel(
+        string Name,
+        int AttackModifier,
+        int AttackPerRound,
+        int DamageDicesCount,
+        int DamageDiceType,
+        int WeaponModifier,
+        int MinAcToAlwaysHit,
+        int DamagePerRoundLeft,
+        int DamagePerRoundRight);
+
     public void OnGet()
     {
         var id = Request.Query["id"];
@@ -20,17 +42,15 @@ public class Result : PageModel
 
         var character = content.ReadFromJsonAsync<Character>().Result!;
 
-        var characterModel = new CharacterModel
-        {
-            Name = character.Name,
-            AttackModifier = character.AttackModifier,
-            AttackPerRound = character.AttackPerRound,
-            DamageDicesCount = character.DamageDicesCount,
-            DamageDiceType = character.DamageDiceType,
-            WeaponModifier = character.WeaponModifier,
-            AttackModifierAddition = attack,
-            DamageModifierAddition = weapon
-        };
+        var characterModel = new CharacterModel(
+            Name: character.Name,
+            AttackModifier: character.AttackModifier,
+            AttackPerRound: character.AttackPerRound,
+            DamageDicesCount: character.DamageDicesCount,
+            DamageDiceType: character.DamageDiceType,
+            WeaponModifier: character.WeaponModifier,
+            AttackModifierAddition: attack,
+            DamageModifierAddition: weapon);
 
         content = client
             .PostAsync($"https://localhost:7198/CalculateCharacterProperties", JsonContent.Create(characterModel))
@@ -39,20 +59,4 @@ public class Result : PageModel
         Console.WriteLine(content.ReadAsStringAsync().Result);
         Character = content.ReadFromJsonAsync<CalculatedCharacterModel>().Result!;
     }
-}
-
-public class CharacterBase : Character
-{ }
-
-internal class CharacterModel : CharacterBase
-{
-    public int AttackModifierAddition { get; set; }
-    public int DamageModifierAddition { get; set; }
-}
-
-public class CalculatedCharacterModel : CharacterBase
-{
-    public int MinAcToAlwaysHit { get; set; }
-    public int DamagePerRoundLeft { get; set; }
-    public int DamagePerRoundRight { get; set; }
 }
