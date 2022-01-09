@@ -31,16 +31,20 @@ public class Result : PageModel
         int DamagePerRoundLeft,
         int DamagePerRoundRight);
 
-    public void OnGet()
+    public async Task OnGetAsync()
     {
         var id = Request.Query["id"];
         var attack = int.Parse(Request.Query["attack"]);
         var weapon = int.Parse(Request.Query["weapon"]);
-        var content = client.GetAsync($"https://localhost:7049/GetCharacterById?id={id}").Result.Content;
 
-        Console.WriteLine(content.ReadAsStringAsync().Result);
+        var responseMessage = await client.GetAsync($"https://localhost:7049/GetCharacterById?id={id}");
+        var content = responseMessage.Content;
 
-        var character = content.ReadFromJsonAsync<Character>().Result!;
+#if (DEBUG == true)
+        Console.WriteLine(await content.ReadAsStringAsync());
+#endif
+
+        var character = (await content.ReadFromJsonAsync<Character>())!;
 
         var characterModel = new CharacterModel(
             Name: character.Name,
@@ -52,11 +56,14 @@ public class Result : PageModel
             AttackModifierAddition: attack,
             DamageModifierAddition: weapon);
 
-        content = client
-            .PostAsync($"https://localhost:7198/CalculateCharacterProperties", JsonContent.Create(characterModel))
-            .Result.Content;
+        responseMessage = await client.PostAsync($"https://localhost:7198/CalculateCharacterProperties",
+            JsonContent.Create(characterModel));
+        content = responseMessage.Content;
 
-        Console.WriteLine(content.ReadAsStringAsync().Result);
-        Character = content.ReadFromJsonAsync<CalculatedCharacterModel>().Result!;
+#if (DEBUG == true)
+        Console.WriteLine(await content.ReadAsStringAsync());
+#endif
+
+        Character = (await content.ReadFromJsonAsync<CalculatedCharacterModel>())!;
     }
 }

@@ -8,11 +8,14 @@ public class IndexModel : PageModel
     public List<Character> Characters { get; set; } = null!;
 
     private static readonly HttpClient client = new();
-    
-    public void OnGet()
+
+    public async Task OnGetAsync()
     {
-        // сразу после открытия страницы идёт парсинг персов с бд
-        var content = client.GetAsync("https://localhost:7049/GetAllCharacters").Result.Content;
-        Characters = content.ReadFromJsonAsync<List<Character>>().Result!;
+        var responseMessage = await client.GetAsync("https://localhost:7049/GetAllCharacters");
+        var content = responseMessage.Content;
+#if (DEBUG == true)
+        Console.WriteLine(await content.ReadAsStringAsync());
+#endif
+        Characters = (await content.ReadFromJsonAsync<List<Character>>())!;
     }
 }
