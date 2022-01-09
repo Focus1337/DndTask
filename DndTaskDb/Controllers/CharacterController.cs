@@ -26,7 +26,7 @@ public class CharacterController : ControllerBase
         new JsonResult(await _repository.GetCharacterAsync(id));
 
     [HttpPost]
-    public async Task<IActionResult> AddCharacter([FromBody] Character newCharacter)
+    public async Task<IActionResult> AddCharacter(Character newCharacter)//([FromBody] Character newCharacter)
     {
         var character = await _repository.GetCharacterAsync(newCharacter.Name);
 
@@ -48,7 +48,7 @@ public class CharacterController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> RemoveCharacter([FromQuery] int id)
+    public async Task<IActionResult> RemoveCharacter(int id)
     {
         var character = await _repository.GetCharacterAsync(id);
 
